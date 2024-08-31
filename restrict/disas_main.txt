@@ -1,0 +1,51 @@
+use:
+        push    rbp
+        mov     rbp, rsp
+        mov     QWORD PTR [rbp-8], rdi
+        mov     QWORD PTR [rbp-16], rsi
+        mov     QWORD PTR [rbp-24], rdx
+        mov     rax, QWORD PTR [rbp-8]
+        mov     edx, DWORD PTR [rax]
+        mov     rax, QWORD PTR [rbp-24]
+        mov     eax, DWORD PTR [rax]
+        add     edx, eax
+        mov     rax, QWORD PTR [rbp-8]
+        mov     DWORD PTR [rax], edx
+        mov     rax, QWORD PTR [rbp-16]
+        mov     edx, DWORD PTR [rax]
+        mov     rax, QWORD PTR [rbp-24]
+        mov     eax, DWORD PTR [rax]
+        add     edx, eax
+        mov     rax, QWORD PTR [rbp-16]
+        mov     DWORD PTR [rax], edx
+        nop
+        pop     rbp
+        ret
+.LC0:
+        .string "%d %d %d\n"
+main:
+        push    rbp
+        mov     rbp, rsp
+        sub     rsp, 16
+        mov     DWORD PTR [rbp-4], 50
+        mov     DWORD PTR [rbp-8], 60
+        mov     DWORD PTR [rbp-12], 70
+        lea     rdx, [rbp-12]
+        lea     rcx, [rbp-8]
+        lea     rax, [rbp-4]
+        mov     rsi, rcx
+        mov     rdi, rax
+        call    use
+        mov     ecx, DWORD PTR [rbp-12]
+        mov     edx, DWORD PTR [rbp-8]
+        mov     eax, DWORD PTR [rbp-4]
+        mov     esi, eax
+        mov     edi, OFFSET FLAT:.LC0
+        mov     eax, 0
+        call    printf
+        mov     eax, 0
+        leave
+        ret
+
+
+disassembled by: https://godbolt.org/ (x86-63 gcc 14.2)
